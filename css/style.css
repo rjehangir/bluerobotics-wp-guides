@@ -63,7 +63,7 @@ h1.anchor-heading {
 }
 
 .learn-product-featured {
-	max-width:400px;
+	max-width:350px;
 	text-align:center;
 	margin-left: auto;
     margin-right: auto;
@@ -95,4 +95,12 @@ h1.anchor-heading {
 	color: white;
 	font-weight: 600;
 	text-decoration: none;
+}
+
+.btn-learn {
+	font-weight: 600 !important;
+}
+
+.btn-learn:visited {
+	color:white !important;
 }

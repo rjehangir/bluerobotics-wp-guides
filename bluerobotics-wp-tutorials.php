@@ -417,11 +417,22 @@ add_shortcode( 'guide_note', 'guide_note_func');
  * Output a button with text.
  */
 function guide_button_func($atts = [], $content = null) {
-	if ( !is_null($content) ) {
+	// normalize attribute keys, lowercase
+	$atts = array_change_key_case((array)$atts, CASE_LOWER);
+
+	$atts = shortcode_atts( array(
+		'text' => '',
+		'url' => ''
+	), $atts, $tag );
+
+	$text = $atts['text'];
+	$url = $atts['url'];
+
+	if ( !is_null($text) ) {
 		$output = '';
-		$output .= '<p class="text-center"><button type="button" class="btn btn-primary">';
-		$output .= $content;
-		$output .= '</button></p>';
+		$output .= '<p class="text-center"><a href="'.$url.'" class="btn btn-primary btn-learn" role="button">';
+		$output .= $text;
+		$output .= '</a></p>';
 		return $output;
 	}
 	return $content;
