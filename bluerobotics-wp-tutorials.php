@@ -63,6 +63,40 @@ function br_guide_post() {
   register_post_type( 'learn', $args);
 }
 
+// hook into the init action and call create_guide_tag_taxonomy when it fires
+add_action( 'init', 'create_guide_tag_taxonomy', 0 );
+function create_guide_tag_taxonomy() {
+	// Labels part for the GUI
+	$labels = array(
+		'name' => _x( 'Tags', 'taxonomy general name' ),
+		'singular_name' => _x( 'Tag', 'taxonomy singular name' ),
+		'search_items' =>  __( 'Search Guide Tags' ),
+		'popular_items' => __( 'Popular Guide Tags' ),
+		'all_items' => __( 'All Guide Tags' ),
+		'parent_item' => null,
+		'parent_item_colon' => null,
+		'edit_item' => __( 'Edit Guide Tag' ), 
+		'update_item' => __( 'Update Guide Tag' ),
+		'add_new_item' => __( 'Add New Guide Tag' ),
+		'new_item_name' => __( 'New Guide Tag Name' ),
+		'separate_items_with_commas' => __( 'Separate guide tags with commas' ),
+		'add_or_remove_items' => __( 'Add or remove guide tags' ),
+		'choose_from_most_used' => __( 'Choose from the most used guide tags' ),
+		'menu_name' => __( 'Tags' ),
+	); 
+
+	// Now register the non-hierarchical taxonomy like tag
+	register_taxonomy('guide_tags','learn',array(
+		'hierarchical' => false,
+		'labels' => $labels,
+		'show_ui' => true,
+		'show_admin_column' => true,
+		'update_count_callback' => '',
+		'query_var' => true,
+		'rewrite' => array( 'slug' => 'guide-tag' ),
+	));
+}
+
 function is_learn() {
     global $post;
 
@@ -103,6 +137,19 @@ function learn_archive_template($archive) {
     return $archive;
 }
 
+/* Filter the taxonomy_template with our custom function*/
+// add_filter('taxonomy_template', 'learn_guide_tag_template', 99);
+
+// function learn_guide_tag_template($taxonomy) {
+//     if ( is_tax('guide_tag') ) {
+//         if ( file_exists( plugin_dir_path( __FILE__ ) . 'templates/taxonomy-guide_tag.php' ) ) {
+//         	echo "hi there";
+//             return plugin_dir_path( __FILE__ ) . 'templates/taxonomy-guide_tag.php';
+//         }
+//     }
+//     return $taxonomy;
+// }
+
 // Register style sheet.
 add_action( 'wp_enqueue_scripts', 'register_plugin_styles' );
 
@@ -123,6 +170,8 @@ function get_learn_nav() {
 
 	$learn_link = get_post_meta( $post->ID, 'learn_forum_link', TRUE );
 
+	$tags = get_the_term_list( $post->ID, 'guide_tags', '<span class="label label-primary">', '</span>&nbsp;<span class="label label-primary">', '</span>' );
+
 	echo '<nav class="learnnav listnav"><ul class="list-group nav">';
 	echo '<li class="list-group-item"><strong>Navigation</strong></li>';
 	foreach ($guide_nav_items as $item) {
@@ -135,8 +184,41 @@ function get_learn_nav() {
 		echo '<li class="list-group-item nav-link"><a href="'.$learn_link.'"><i class="fa fa-fw fa-users" aria-hidden="true"></i> Forum</a></li>';
 	}
 	echo '<li class="list-group-item nav-link"><a href="javascript:window.print()"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print</a></li>';
+	echo '</ul></nav>';
+
+	if ( $tags != '' ) {
+		echo '<nav class="listnav"><ul class="list-group nav">';
+		echo '<li class="list-group-item"><strong>Tags</strong></li>';
+		echo '<li class="list-group-item">';
+		echo $tags;
+		echo '</li>';
+		echo '</ul></nav>';
+	}
+
+	echo '<nav class="listnav"><ul class="list-group nav">';
 	echo '<li class="list-group-item small">Posted '.date('j M Y',strtotime($post->post_date)).'<br />Last updated on '.date('j M Y', strtotime($post->post_modified_gmt)).'</li>';
 	echo '</ul></nav>';
+}
+
+/**
+ * Output the side bar navigation menu for the theme.
+ */
+function get_learn_archive_nav() {
+
+	//$tags = get_the_term_list( $post->ID, 'guide_tags', '<span class="label label-primary">', '</span>&nbsp;<span class="label label-primary">', '</span>' );
+
+	$tags = get_terms( array('taxonomy' => 'guide_tags','hide_empty' => false,) );
+
+	if ( $tags != '' ) {
+		echo '<nav class="listnav"><ul class="list-group nav">';
+		echo '<li class="list-group-item"><strong>Tags</strong></li>';
+		echo '<li class="list-group-item">';
+		foreach ( $tags as $tag ) {
+			echo '<span class="label label-primary"><a href="'.get_term_link( $tag->slug, $tag->taxonomy ).'">'.$tag->name.'</a></span>&nbsp;';
+		}
+		echo '</li>';
+		echo '</ul></nav>';
+	}
 }
 
 /**

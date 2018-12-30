@@ -19,10 +19,9 @@
 		</div>
 	</div>
 	<div class="col-md-3">
-  		<ul class="list-group">
-			<li class="list-group-item"><a href="#respond"><i class="fa fa-fw fa-comment-o" aria-hidden="true"></i> Comments</a></li>
-			<li class="list-group-item"><a href="javascript:window.print()"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print</a></li>
-		</ul>
+  		<div data-spy="affix" data-offset-top="170" style="width:291px">
+  			<?php get_learn_archive_nav(); ?>
+  		</div>
   	</div>
 	<footer>
 	  <?php wp_link_pages(array('before' => '<nav class="page-nav"><p>' . __('Pages:', 'roots'), 'after' => '</p></nav>')); ?>

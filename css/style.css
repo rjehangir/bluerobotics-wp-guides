@@ -76,3 +76,13 @@ h1.anchor-heading {
 .learn-product ul.products li.product {
 	margin: 0 3.8% 1em 0 !important;
 }
+
+.list-group-item .label:hover {
+	background: #2A6496;
+}
+
+.list-group-item .label-primary a {
+	color: white;
+	font-weight: 600;
+	text-decoration: none;
+}
