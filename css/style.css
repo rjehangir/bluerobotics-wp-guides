@@ -1,0 +1,78 @@
+/* Style for Blue Robotics Learn Guide Plugin */
+
+.affix {
+	top: 75px;
+} 
+
+.list-group a:link, 
+.list-group a:visited, 
+.list-group a:hover, 
+.list-group a:active {
+	color: #2699D0;
+}
+
+.list-group strong {
+	color: #666;
+}
+
+.listnav .list-group-item.nav-link {
+	padding: 0px;
+}
+
+.listnav .active,
+.listnav .active:hover {
+	background: #2699d0;
+	color: white;
+}
+
+.listnav .active a,
+.listnav .active a:hover {
+	color: white;
+}
+
+.listnav .anchor {
+	font-size:0.6em;
+	color:#aaa;
+}
+
+h1 .anchor,
+h2 .anchor {
+	font-size:0.6em;
+	color:rgba(0,0,0,0);
+}
+
+h1:hover .anchor,
+h2:hover .anchor {
+	color:#2699d0;
+}
+
+h1.anchor-heading {
+	padding-top: 60px; 
+	margin-top: -40px;
+}
+
+.learn-image-wrapper {
+	padding-top:10px;
+	padding-bottom:20px;
+}
+
+.learn-image-caption {
+	font-size:0.9em;
+	color: #999;
+	padding-top: 5px;
+}
+
+.learn-product-featured {
+	max-width:400px;
+	text-align:center;
+	margin-left: auto;
+    margin-right: auto;
+}
+
+.learn-product-featured ul.products li.product {
+	margin: 0 3.8% 1em 0 !important;
+}
+
+.learn-product ul.products li.product {
+	margin: 0 3.8% 1em 0 !important;
+}
