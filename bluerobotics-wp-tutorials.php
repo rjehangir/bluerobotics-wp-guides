@@ -22,45 +22,45 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 add_action( 'init', 'br_guide_post' );
 
 $guide_nav_items = array();
- 
+
 // The custom function to register a tutorial post type
 function br_guide_post() {
- 
+	
   // Set the labels, this variable is used in the $args array
-  $labels = array(
-    'name'               => __( 'Learn' ),
-    'singular_name'      => __( 'Learn' ),
-    'add_new'            => __( 'Add New Learn Guide' ),
-    'add_new_item'       => __( 'Add New Learn Guide' ),
-    'edit_item'          => __( 'Edit Learn Guide' ),
-    'new_item'           => __( 'New Learn Guide' ),
-    'all_items'          => __( 'All Learn Guides' ),
-    'view_item'          => __( 'View Learn Guide' ),
-    'search_items'       => __( 'Search Learn Guides' ),
-    'featured_image'     => 'Featured Image',
-    'set_featured_image' => 'Add Featured Image'
-  );
- 
+	$labels = array(
+		'name'               => __( 'Learn' ),
+		'singular_name'      => __( 'Learn' ),
+		'add_new'            => __( 'Add New Learn Guide' ),
+		'add_new_item'       => __( 'Add New Learn Guide' ),
+		'edit_item'          => __( 'Edit Learn Guide' ),
+		'new_item'           => __( 'New Learn Guide' ),
+		'all_items'          => __( 'All Learn Guides' ),
+		'view_item'          => __( 'View Learn Guide' ),
+		'search_items'       => __( 'Search Learn Guides' ),
+		'featured_image'     => 'Featured Image',
+		'set_featured_image' => 'Add Featured Image'
+	);
+	
   // The arguments for our post type, to be entered as parameter 2 of register_post_type()
-  $args = array(
-    'labels'            => $labels,
-    'description'       => 'Holds our learn guides and guide specific data',
-    'public'            => true,
-    'menu_position'     => 5,
-    'menu_icon'			=> 'dashicons-book-alt',
-    'supports'          => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-    'has_archive'       => true,
-    'exclude_from_search' => false,
-    'show_in_admin_bar' => true,
-    'show_in_nav_menus' => true,
-    'has_archive'       => true,
-    'query_var'         => true
-  );
- 
+	$args = array(
+		'labels'            => $labels,
+		'description'       => 'Holds our learn guides and guide specific data',
+		'public'            => true,
+		'menu_position'     => 5,
+		'menu_icon'			=> 'dashicons-book-alt',
+		'supports'          => array( 'title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'page-attributes' ),
+		'has_archive'       => true,
+		'exclude_from_search' => false,
+		'show_in_admin_bar' => true,
+		'show_in_nav_menus' => true,
+		'has_archive'       => true,
+		'query_var'         => true
+	);
+	
   // Call the actual WordPress function
   // Parameter 1 is a name for the post type
   // Parameter 2 is the $args array
-  register_post_type( 'learn', $args);
+	register_post_type( 'learn', $args);
 }
 
 // hook into the init action and call create_guide_tag_taxonomy when it fires
@@ -98,43 +98,43 @@ function create_guide_tag_taxonomy() {
 }
 
 function is_learn() {
-    global $post;
+	global $post;
 
-    /* Checks for single template by post type */
-    if ( $post->post_type == 'learn' ) {
-        return true;
-    }
-    return false;
+	/* Checks for single template by post type */
+	if ( $post->post_type == 'learn' ) {
+		return true;
+	}
+	return false;
 }
 
 /* Filter the single_template with our custom function*/
 add_filter('single_template', 'learn_single_template', 99);
 
 function learn_single_template($single) {
-    global $post;
+	global $post;
 
-    /* Checks for single template by post type */
-    if ( $post->post_type == 'learn' ) {
-        if ( file_exists( plugin_dir_path( __FILE__ ) . 'templates/single-learn.php' ) ) {
-            return plugin_dir_path( __FILE__ ) . 'templates/single-learn.php';
-        }
-    }
-    return $single;
+	/* Checks for single template by post type */
+	if ( $post->post_type == 'learn' ) {
+		if ( file_exists( plugin_dir_path( __FILE__ ) . 'templates/single-learn.php' ) ) {
+			return plugin_dir_path( __FILE__ ) . 'templates/single-learn.php';
+		}
+	}
+	return $single;
 }
 
 /* Filter the archive_template with our custom function*/
 add_filter('archive_template', 'learn_archive_template', 99);
 
 function learn_archive_template($archive) {
-    global $post;
+	global $post;
 
-    /* Checks for single template by post type */
-    if ( $post->post_type == 'learn' ) {
-        if ( file_exists( plugin_dir_path( __FILE__ ) . 'templates/archive-learn.php' ) ) {
-            return plugin_dir_path( __FILE__ ) . 'templates/archive-learn.php';
-        }
-    }
-    return $archive;
+	/* Checks for single template by post type */
+	if ( $post->post_type == 'learn' ) {
+		if ( file_exists( plugin_dir_path( __FILE__ ) . 'templates/archive-learn.php' ) ) {
+			return plugin_dir_path( __FILE__ ) . 'templates/archive-learn.php';
+		}
+	}
+	return $archive;
 }
 
 /* Filter the taxonomy_template with our custom function*/
@@ -160,6 +160,68 @@ function register_plugin_styles() {
 	wp_register_style( 'bluerobotics-wp-tutorials', plugins_url( 'bluerobotics-wp-tutorials/css/style.css' ) );
 	wp_enqueue_style( 'bluerobotics-wp-tutorials' );
 }
+
+/**
+ * Add meta box on post editor.
+ */
+function learn_add_custom_meta_box()
+{
+	$screens = ['learn'];
+	foreach ($screens as $screen) {
+		add_meta_box(
+            'learn_guide_meta_box_id',	// Unique ID
+            'Learn Guide Meta Fields',	// Box title
+            'learn_meta_box_html',    	// Content callback, must be of type callable
+            $screen                   	// Post type
+        );
+	}
+}
+add_action('add_meta_boxes', 'learn_add_custom_meta_box');
+
+/**
+ * Output meta box on post.
+ */
+function learn_meta_box_html($post)
+{
+	?>
+	<input type="hidden" name="learn_meta_box_nonce" value="<?php echo wp_create_nonce( basename(__FILE__) ); ?>">
+
+	<label for="learn_forum_link_field">Blue Robotics Discuss Forum URL: </label>
+	<input type="text" name="learn_forum_link_field" id="learn_forum_link_field" class="regular-text" value="<?php echo get_post_meta( $post->ID, 'learn_forum_link', true ); ?>" style="width:500px" />
+	<?php
+}
+
+/**
+ * Save field from meta box on post.
+ */
+function learn_meta_box_save_fields( $post_id ) {   
+	// verify nonce
+	if ( !wp_verify_nonce( $_POST['learn_meta_box_nonce'], basename(__FILE__) ) ) {
+		return $post_id; 
+	}
+	// check autosave
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return $post_id;
+	}
+	// check permissions
+	// if ( 'page' === $_POST['post_type'] ) {
+	// 	if ( !current_user_can( 'edit_page', $post_id ) ) {
+	// 		return $post_id;
+	// 	} elseif ( !current_user_can( 'edit_post', $post_id ) ) {
+	// 		return $post_id;
+	// 	}  
+	// }
+	
+	$old = get_post_meta( $post_id, 'learn_forum_link', true );
+	$new = $_POST['learn_forum_link_field'];
+
+	if ( $new && $new !== $old ) {
+		update_post_meta( $post_id, 'learn_forum_link', $new );
+	} elseif ( '' === $new && $old ) {
+		delete_post_meta( $post_id, 'learn_forum_link', $old );
+	}
+}
+add_action( 'save_post', 'learn_meta_box_save_fields' );
 
 /**
  * Output the side bar navigation menu for the theme.
@@ -229,7 +291,7 @@ function guide_heading_func( $atts, $content = null, $tag = '' ) {
 	global $guide_nav_items;
 
 	// normalize attribute keys, lowercase
-    $atts = array_change_key_case((array)$atts, CASE_LOWER);
+	$atts = array_change_key_case((array)$atts, CASE_LOWER);
 
 	$atts = shortcode_atts( array(
 		'title' => 'Title Placeholder',
@@ -251,7 +313,7 @@ function guide_heading_func( $atts, $content = null, $tag = '' ) {
 	$output = '';
 	$output .= '<h1  class="anchor-heading" id="' . $anchor . '">';
 	$output .= $title . ' <a href="#' . $anchor . '" class="anchor"><i class="fa fa-link" aria-hidden="true"></i>
-</a></h1>';
+	</a></h1>';
 
 	return $output;
 }
@@ -265,7 +327,7 @@ function guide_subheading_func( $atts, $content = null, $tag = '' ) {
 	global $guide_nav_items;
 
 	// normalize attribute keys, lowercase
-    $atts = array_change_key_case((array)$atts, CASE_LOWER);
+	$atts = array_change_key_case((array)$atts, CASE_LOWER);
 
 	$atts = shortcode_atts( array(
 		'title' => 'Title Placeholder',
@@ -287,7 +349,7 @@ function guide_subheading_func( $atts, $content = null, $tag = '' ) {
 	$output = '';
 	$output .= '<h2 class="anchor-heading" id="' . $anchor . '">';
 	$output .= $title . ' <a href="#' . $anchor . '" class="anchor"><i class="fa fa-link" aria-hidden="true"></i>
-</a></h2>';
+	</a></h2>';
 
 	return $output;
 }
@@ -300,7 +362,7 @@ function guide_image_func( $atts, $content = null, $tag = '' ) {
 	global $post;
 
 	// normalize attribute keys, lowercase
-    $atts = array_change_key_case((array)$atts, CASE_LOWER);
+	$atts = array_change_key_case((array)$atts, CASE_LOWER);
 
 	$atts = shortcode_atts( array(
 		'src' => '',
