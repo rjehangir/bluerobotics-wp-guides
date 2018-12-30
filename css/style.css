@@ -77,6 +77,16 @@ h1.anchor-heading {
 	margin: 0 3.8% 1em 0 !important;
 }
 
+.list-group-item.tags {
+	padding-bottom: 5px;
+}
+
+.list-group-item .label {
+	display: inline-block;
+	margin-bottom:5px;
+	line-height: inherit;
+}
+
 .list-group-item .label:hover {
 	background: #2A6496;
 }

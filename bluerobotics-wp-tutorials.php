@@ -25,7 +25,7 @@ $guide_nav_items = array();
 
 // The custom function to register a tutorial post type
 function br_guide_post() {
-	
+
   // Set the labels, this variable is used in the $args array
 	$labels = array(
 		'name'               => __( 'Learn' ),
@@ -40,7 +40,7 @@ function br_guide_post() {
 		'featured_image'     => 'Featured Image',
 		'set_featured_image' => 'Add Featured Image'
 	);
-	
+
   // The arguments for our post type, to be entered as parameter 2 of register_post_type()
 	$args = array(
 		'labels'            => $labels,
@@ -56,7 +56,7 @@ function br_guide_post() {
 		'has_archive'       => true,
 		'query_var'         => true
 	);
-	
+
   // Call the actual WordPress function
   // Parameter 1 is a name for the post type
   // Parameter 2 is the $args array
@@ -232,7 +232,7 @@ function get_learn_nav() {
 
 	$learn_link = get_post_meta( $post->ID, 'learn_forum_link', TRUE );
 
-	$tags = get_the_term_list( $post->ID, 'guide_tags', '<span class="label label-primary">', '</span>&nbsp;<span class="label label-primary">', '</span>' );
+	$tags = get_the_term_list( $post->ID, 'guide_tags', '<span class="label label-primary">', '</span> <span class="label label-primary">', '</span>' );
 
 	echo '<nav class="learnnav listnav"><ul class="list-group nav">';
 	echo '<li class="list-group-item"><strong>Navigation</strong></li>';
@@ -251,7 +251,7 @@ function get_learn_nav() {
 	if ( $tags != '' ) {
 		echo '<nav class="listnav"><ul class="list-group nav">';
 		echo '<li class="list-group-item"><strong>Tags</strong></li>';
-		echo '<li class="list-group-item">';
+		echo '<li class="list-group-item tags">';
 		echo $tags;
 		echo '</li>';
 		echo '</ul></nav>';
@@ -274,9 +274,9 @@ function get_learn_archive_nav() {
 	if ( $tags != '' ) {
 		echo '<nav class="listnav"><ul class="list-group nav">';
 		echo '<li class="list-group-item"><strong>Tags</strong></li>';
-		echo '<li class="list-group-item">';
+		echo '<li class="list-group-item tags">';
 		foreach ( $tags as $tag ) {
-			echo '<span class="label label-primary"><a href="'.get_term_link( $tag->slug, $tag->taxonomy ).'">'.$tag->name.'</a></span>&nbsp;';
+			echo '<span class="label label-primary"><a href="'.get_term_link( $tag->slug, $tag->taxonomy ).'">'.$tag->name.'</a></span> ';
 		}
 		echo '</li>';
 		echo '</ul></nav>';
