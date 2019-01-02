@@ -4,6 +4,12 @@
 	top: 75px;
 } 
 
+.affix-bottom {
+    position: relative;
+    width: 100%;
+    bottom: 0px;
+}
+
 .list-group a:link, 
 .list-group a:visited, 
 .list-group a:hover, 
@@ -54,6 +60,14 @@ h1.anchor-heading {
 .learn-image-wrapper {
 	padding-top:10px;
 	padding-bottom:20px;
+}
+
+.img-learn {
+	max-width: 90% !important;
+}
+
+.img-learn-archive {
+	border: #ddd solid 1px;
 }
 
 .learn-image-caption {

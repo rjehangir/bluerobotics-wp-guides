@@ -2,14 +2,22 @@
     <header>
       <br />
       <span class="woocommerce"><?php woocommerce_breadcrumb(); ?></span>
-      <h1 class="entry-title">Tutorials and Guides</h1>
+      <?php 
+      $title = get_the_archive_title();
+      if (strpos($title, 'Tag') !== false) {
+      	// Keep it.
+      } else {
+      	$title = "Guides and Tutorials";
+      }
+      ?>
+      <h1 class="entry-title"><?php echo $title; ?></h1>
     </header>
     <div class="col-md-9 no-padding">
     	<div class="entry-content row">   
 <?php while (have_posts()) : the_post(); ?>
 	    	<div class="col-md-3">
 	    		<a href="<?php echo esc_url( get_permalink() ); ?>">
-		    		<?php the_post_thumbnail( 'shop_catalog', ['class' => 'img-responsive'] ); ?>
+		    		<?php the_post_thumbnail( 'shop_catalog', ['class' => 'img-responsive img-learn-archive'] ); ?>
 		    		<h3 class="product-title"><?php the_title(); ?></h3>
 	    		</a>
 	    		<span style="font-size:0.9em;color:#666;"><?php echo date('j F Y',strtotime(get_the_date())); ?></span>

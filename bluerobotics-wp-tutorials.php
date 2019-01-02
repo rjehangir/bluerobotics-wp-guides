@@ -372,8 +372,18 @@ function guide_image_func( $atts, $content = null, $tag = '' ) {
 	$src = $atts['src'];
 	$caption = $atts['caption'];
 
+	$id = pn_get_attachment_id_from_url($src);
+
+	if ( $id > 0 ) {
+		//$image_large = wp_get_attachment_image( $id, 'large', "", array( "class" => "img-responsive img-center no-lazy-load img-learn" ));
+		$image_atts = wp_get_attachment_image_src( $id, 'large' );
+		$src = $image_atts[0];
+		//$output .= '<div class="learn-image-wrapper"><a href="'.$src.'">'.$image_large.'</a>';
+	}
+
 	$output = '';
-	$output .= '<div class="learn-image-wrapper"><a href="'.$src.'"><img src="'.$src.'" class="img-responsive img-center no-lazy-load" style="max-width:90%" /></a>';
+	$output .= '<div class="learn-image-wrapper"><a href="'.$src.'"><img src="'.$src.'" class="img-responsive img-center no-lazy-load img-learn" /></a>';
+	
 	if ( $caption != '' ) {
 		$output .= '<p class="learn-image-caption text-center">'.$caption.'</p>';
 	}
@@ -382,6 +392,38 @@ function guide_image_func( $atts, $content = null, $tag = '' ) {
 	return $output;
 }
 add_shortcode( 'guide_image', 'guide_image_func' );
+
+/**
+ * Grab the attachment ID from the URL so we can send a smaller image size.
+ */
+function pn_get_attachment_id_from_url( $attachment_url = '' ) {
+ 
+	global $wpdb;
+	$attachment_id = false;
+ 
+	// If there is no url, return.
+	if ( '' == $attachment_url )
+		return;
+ 
+	// Get the upload directory paths
+	$upload_dir_paths = wp_upload_dir();
+ 
+	// Make sure the upload path base directory exists in the attachment URL, to verify that we're working with a media library image
+	if ( false !== strpos( $attachment_url, $upload_dir_paths['baseurl'] ) ) {
+ 
+		// If this is the URL of an auto-generated thumbnail, get the URL of the original image
+		$attachment_url = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $attachment_url );
+ 
+		// Remove the upload path base directory from the attachment URL
+		$attachment_url = str_replace( $upload_dir_paths['baseurl'] . '/', '', $attachment_url );
+ 
+		// Finally, run a custom database query to get the attachment ID from the modified attachment URL
+		$attachment_id = $wpdb->get_var( $wpdb->prepare( "SELECT wposts.ID FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta WHERE wposts.ID = wpostmeta.post_id AND wpostmeta.meta_key = '_wp_attached_file' AND wpostmeta.meta_value = '%s' AND wposts.post_type = 'attachment'", $attachment_url ) );
+ 
+	}
+ 
+	return $attachment_id;
+}
 
 /**
  * Output a warning with an icon in an alert box.
