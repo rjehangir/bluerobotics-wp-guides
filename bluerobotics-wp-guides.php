@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: Blue Robotics WP Tutorials
+ * Plugin Name: Blue Robotics WP Guides
  * Plugin URI: http://bluerobotics.com
  * Description: Simple guide post generator for documentation on Blue Robotics website.
  * Author: Rustom Jehangir
  * Author URI: http://rstm.io
- * Version: 0.0.1
+ * Version: 0.0.2
  *
  * Copyright: (c) 2019 Rustom Jehangir
  *
