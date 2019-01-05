@@ -17,7 +17,7 @@
 <?php while (have_posts()) : the_post(); ?>
 	    	<div class="col-md-3">
 	    		<a href="<?php echo esc_url( get_permalink() ); ?>">
-		    		<?php the_post_thumbnail( 'shop_catalog', ['class' => 'img-responsive img-learn-archive'] ); ?>
+		    		<?php the_post_thumbnail( 'shop_catalog', ['class' => 'img-responsive img-guide-archive'] ); ?>
 		    		<h3 class="product-title"><?php the_title(); ?></h3>
 	    		</a>
 	    		<span style="font-size:0.9em;color:#666;"><?php echo date('j F Y',strtotime(get_the_date())); ?></span>
@@ -28,7 +28,7 @@
 	</div>
 	<div class="col-md-3">
   		<div data-spy="affix" data-offset-top="170" style="width:291px">
-  			<?php get_learn_archive_nav(); ?>
+  			<?php get_guide_archive_nav(); ?>
   		</div>
   	</div>
 	<footer>

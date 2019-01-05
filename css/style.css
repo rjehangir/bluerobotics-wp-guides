@@ -1,4 +1,4 @@
-/* Style for Blue Robotics Learn Guide Plugin */
+/* Style for Blue Robotics Guide Plugin */
 
 .affix {
 	top: 75px;
@@ -57,37 +57,37 @@ h1.anchor-heading {
 	margin-top: -40px;
 }
 
-.learn-image-wrapper {
+.guide-image-wrapper {
 	padding-top:10px;
 	padding-bottom:20px;
 }
 
-.img-learn {
+.img-guide {
 	max-width: 90% !important;
 }
 
-.img-learn-archive {
+.img-guide-archive {
 	border: #ddd solid 1px;
 }
 
-.learn-image-caption {
+.guide-image-caption {
 	font-size:0.9em;
 	color: #999;
 	padding-top: 5px;
 }
 
-.learn-product-featured {
+.guide-product-featured {
 	max-width:350px;
 	text-align:center;
 	margin-left: auto;
     margin-right: auto;
 }
 
-.learn-product-featured ul.products li.product {
+.guide-product-featured ul.products li.product {
 	margin: 0 3.8% 1em 0 !important;
 }
 
-.learn-product ul.products li.product {
+.guide-product ul.products li.product {
 	margin: 0 3.8% 1em 0 !important;
 }
 
@@ -111,10 +111,10 @@ h1.anchor-heading {
 	text-decoration: none;
 }
 
-.btn-learn {
+.btn-guide {
 	font-weight: 600 !important;
 }
 
-.btn-learn:visited {
+.btn-guide:visited {
 	color:white !important;
 }

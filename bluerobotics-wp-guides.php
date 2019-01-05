@@ -28,15 +28,15 @@ function br_guide_post() {
 
   // Set the labels, this variable is used in the $args array
 	$labels = array(
-		'name'               => __( 'Learn' ),
-		'singular_name'      => __( 'Learn' ),
-		'add_new'            => __( 'Add New Learn Guide' ),
-		'add_new_item'       => __( 'Add New Learn Guide' ),
-		'edit_item'          => __( 'Edit Learn Guide' ),
-		'new_item'           => __( 'New Learn Guide' ),
-		'all_items'          => __( 'All Learn Guides' ),
-		'view_item'          => __( 'View Learn Guide' ),
-		'search_items'       => __( 'Search Learn Guides' ),
+		'name'               => __( 'Guides' ),
+		'singular_name'      => __( 'Guide' ),
+		'add_new'            => __( 'Add New Guide' ),
+		'add_new_item'       => __( 'Add New Guide' ),
+		'edit_item'          => __( 'Edit Guide' ),
+		'new_item'           => __( 'New Guide' ),
+		'all_items'          => __( 'All Guides' ),
+		'view_item'          => __( 'View Guide' ),
+		'search_items'       => __( 'Search Guides' ),
 		'featured_image'     => 'Featured Image',
 		'set_featured_image' => 'Add Featured Image'
 	);
@@ -44,7 +44,7 @@ function br_guide_post() {
   // The arguments for our post type, to be entered as parameter 2 of register_post_type()
 	$args = array(
 		'labels'            => $labels,
-		'description'       => 'Holds our learn guides and guide specific data',
+		'description'       => 'Holds our guides and guide specific data',
 		'public'            => true,
 		'menu_position'     => 5,
 		'menu_icon'			=> 'dashicons-book-alt',
@@ -108,47 +108,34 @@ function is_learn() {
 }
 
 /* Filter the single_template with our custom function*/
-add_filter('single_template', 'learn_single_template', 99);
+add_filter('single_template', 'guide_single_template', 99);
 
-function learn_single_template($single) {
+function guide_single_template($single) {
 	global $post;
 
 	/* Checks for single template by post type */
 	if ( $post->post_type == 'learn' ) {
-		if ( file_exists( plugin_dir_path( __FILE__ ) . 'templates/single-learn.php' ) ) {
-			return plugin_dir_path( __FILE__ ) . 'templates/single-learn.php';
+		if ( file_exists( plugin_dir_path( __FILE__ ) . 'templates/single-guide.php' ) ) {
+			return plugin_dir_path( __FILE__ ) . 'templates/single-guide.php';
 		}
 	}
 	return $single;
 }
 
 /* Filter the archive_template with our custom function*/
-add_filter('archive_template', 'learn_archive_template', 99);
+add_filter('archive_template', 'guide_archive_template', 99);
 
-function learn_archive_template($archive) {
+function guide_archive_template($archive) {
 	global $post;
 
 	/* Checks for single template by post type */
 	if ( $post->post_type == 'learn' ) {
-		if ( file_exists( plugin_dir_path( __FILE__ ) . 'templates/archive-learn.php' ) ) {
-			return plugin_dir_path( __FILE__ ) . 'templates/archive-learn.php';
+		if ( file_exists( plugin_dir_path( __FILE__ ) . 'templates/archive-guide.php' ) ) {
+			return plugin_dir_path( __FILE__ ) . 'templates/archive-guide.php';
 		}
 	}
 	return $archive;
 }
-
-/* Filter the taxonomy_template with our custom function*/
-// add_filter('taxonomy_template', 'learn_guide_tag_template', 99);
-
-// function learn_guide_tag_template($taxonomy) {
-//     if ( is_tax('guide_tag') ) {
-//         if ( file_exists( plugin_dir_path( __FILE__ ) . 'templates/taxonomy-guide_tag.php' ) ) {
-//         	echo "hi there";
-//             return plugin_dir_path( __FILE__ ) . 'templates/taxonomy-guide_tag.php';
-//         }
-//     }
-//     return $taxonomy;
-// }
 
 // Register style sheet.
 add_action( 'wp_enqueue_scripts', 'register_plugin_styles' );
@@ -157,46 +144,46 @@ add_action( 'wp_enqueue_scripts', 'register_plugin_styles' );
  * Register style sheet.
  */
 function register_plugin_styles() {
-	wp_register_style( 'bluerobotics-wp-tutorials', plugins_url( 'bluerobotics-wp-tutorials/css/style.css' ) );
-	wp_enqueue_style( 'bluerobotics-wp-tutorials' );
+	wp_register_style( 'bluerobotics-wp-guides', plugins_url( 'bluerobotics-wp-guides/css/style.css' ) );
+	wp_enqueue_style( 'bluerobotics-wp-guides' );
 }
 
 /**
  * Add meta box on post editor.
  */
-function learn_add_custom_meta_box()
+function guide_add_custom_meta_box()
 {
 	$screens = ['learn'];
 	foreach ($screens as $screen) {
 		add_meta_box(
-            'learn_guide_meta_box_id',	// Unique ID
-            'Learn Guide Meta Fields',	// Box title
-            'learn_meta_box_html',    	// Content callback, must be of type callable
+            'guide_guide_meta_box_id',	// Unique ID
+            'Guide Meta Fields',	// Box title
+            'guide_meta_box_html',    	// Content callback, must be of type callable
             $screen                   	// Post type
         );
 	}
 }
-add_action('add_meta_boxes', 'learn_add_custom_meta_box');
+add_action('add_meta_boxes', 'guide_add_custom_meta_box');
 
 /**
  * Output meta box on post.
  */
-function learn_meta_box_html($post)
+function guide_meta_box_html($post)
 {
 	?>
-	<input type="hidden" name="learn_meta_box_nonce" value="<?php echo wp_create_nonce( basename(__FILE__) ); ?>">
+	<input type="hidden" name="guide_meta_box_nonce" value="<?php echo wp_create_nonce( basename(__FILE__) ); ?>">
 
-	<label for="learn_forum_link_field">Blue Robotics Discuss Forum URL: </label>
-	<input type="text" name="learn_forum_link_field" id="learn_forum_link_field" class="regular-text" value="<?php echo get_post_meta( $post->ID, 'learn_forum_link', true ); ?>" style="width:500px" />
+	<label for="guide_forum_link_field">Blue Robotics Discuss Forum URL: </label>
+	<input type="text" name="guide_forum_link_field" id="guide_forum_link_field" class="regular-text" value="<?php echo get_post_meta( $post->ID, 'guide_forum_link', true ); ?>" style="width:500px" />
 	<?php
 }
 
 /**
  * Save field from meta box on post.
  */
-function learn_meta_box_save_fields( $post_id ) {   
+function guide_meta_box_save_fields( $post_id ) {   
 	// verify nonce
-	if ( !wp_verify_nonce( $_POST['learn_meta_box_nonce'], basename(__FILE__) ) ) {
+	if ( !wp_verify_nonce( $_POST['guide_meta_box_nonce'], basename(__FILE__) ) ) {
 		return $post_id; 
 	}
 	// check autosave
@@ -212,29 +199,29 @@ function learn_meta_box_save_fields( $post_id ) {
 	// 	}  
 	// }
 	
-	$old = get_post_meta( $post_id, 'learn_forum_link', true );
-	$new = $_POST['learn_forum_link_field'];
+	$old = get_post_meta( $post_id, 'guide_forum_link', true );
+	$new = $_POST['guide_forum_link_field'];
 
 	if ( $new && $new !== $old ) {
-		update_post_meta( $post_id, 'learn_forum_link', $new );
+		update_post_meta( $post_id, 'guide_forum_link', $new );
 	} elseif ( '' === $new && $old ) {
-		delete_post_meta( $post_id, 'learn_forum_link', $old );
+		delete_post_meta( $post_id, 'guide_forum_link', $old );
 	}
 }
-add_action( 'save_post', 'learn_meta_box_save_fields' );
+add_action( 'save_post', 'guide_meta_box_save_fields' );
 
 /**
  * Output the side bar navigation menu for the theme.
  */
-function get_learn_nav() {
+function get_guide_nav() {
 	global $post;
 	global $guide_nav_items;
 
-	$learn_link = get_post_meta( $post->ID, 'learn_forum_link', TRUE );
+	$guide_link = get_post_meta( $post->ID, 'guide_forum_link', TRUE );
 
 	$tags = get_the_term_list( $post->ID, 'guide_tags', '<span class="label label-primary">', '</span> <span class="label label-primary">', '</span>' );
 
-	echo '<nav class="learnnav listnav"><ul class="list-group nav">';
+	echo '<nav class="guidenav listnav"><ul class="list-group nav">';
 	echo '<li class="list-group-item"><strong>Navigation</strong></li>';
 	foreach ($guide_nav_items as $item) {
 		echo '<li class="list-group-item nav-link"><a href="#'.$item["anchor"].'">'.$item["nav_title"].'</a></li>';
@@ -242,8 +229,8 @@ function get_learn_nav() {
 	echo '</ul></nav>';
 
 	echo '<nav class="listnav"><ul class="list-group nav">';
-	if ( $learn_link != '' ) {
-		echo '<li class="list-group-item nav-link"><a href="'.$learn_link.'"><i class="fa fa-fw fa-users" aria-hidden="true"></i> Forum</a></li>';
+	if ( $guide_link != '' ) {
+		echo '<li class="list-group-item nav-link"><a href="'.$guide_link.'"><i class="fa fa-fw fa-users" aria-hidden="true"></i> Forum</a></li>';
 	}
 	echo '<li class="list-group-item nav-link"><a href="javascript:window.print()"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print</a></li>';
 	echo '</ul></nav>';
@@ -265,7 +252,7 @@ function get_learn_nav() {
 /**
  * Output the side bar navigation menu for the theme.
  */
-function get_learn_archive_nav() {
+function get_guide_archive_nav() {
 
 	//$tags = get_the_term_list( $post->ID, 'guide_tags', '<span class="label label-primary">', '</span>&nbsp;<span class="label label-primary">', '</span>' );
 
@@ -366,26 +353,34 @@ function guide_image_func( $atts, $content = null, $tag = '' ) {
 
 	$atts = shortcode_atts( array(
 		'src' => '',
+		'alt' => '',
 		'caption' => ''
 	), $atts, $tag );
 
 	$src = $atts['src'];
+	$alt = $atts['alt'];
 	$caption = $atts['caption'];
 
 	$id = pn_get_attachment_id_from_url($src);
 
 	if ( $id > 0 ) {
-		//$image_large = wp_get_attachment_image( $id, 'large', "", array( "class" => "img-responsive img-center no-lazy-load img-learn" ));
 		$image_atts = wp_get_attachment_image_src( $id, 'large' );
 		$src = $image_atts[0];
-		//$output .= '<div class="learn-image-wrapper"><a href="'.$src.'">'.$image_large.'</a>';
+	}
+
+	if ( $alt == '' ) {
+		if ( $caption == '' ) {
+			$alt = get_the_title($id);
+		} else {
+			$alt = $caption;
+		}
 	}
 
 	$output = '';
-	$output .= '<div class="learn-image-wrapper"><a href="'.$src.'"><img src="'.$src.'" class="img-responsive img-center no-lazy-load img-learn" /></a>';
+	$output .= '<div class="guide-image-wrapper"><a href="'.$src.'"><img src="'.$src.'" alt="'.$alt.'" class="img-responsive img-center no-lazy-load img-guide" /></a>';
 	
 	if ( $caption != '' ) {
-		$output .= '<p class="learn-image-caption text-center">'.$caption.'</p>';
+		$output .= '<p class="guide-image-caption text-center">'.$caption.'</p>';
 	}
 	$output .= '</div>';
 
@@ -472,7 +467,7 @@ function guide_button_func($atts = [], $content = null) {
 
 	if ( !is_null($text) ) {
 		$output = '';
-		$output .= '<p class="text-center"><a href="'.$url.'" class="btn btn-primary btn-learn" role="button">';
+		$output .= '<p class="text-center"><a href="'.$url.'" class="btn btn-primary btn-guide" role="button">';
 		$output .= $text;
 		$output .= '</a></p>';
 		return $output;
@@ -480,5 +475,14 @@ function guide_button_func($atts = [], $content = null) {
 	return $content;
 }
 add_shortcode( 'guide_button', 'guide_button_func');
+
+function migration_javascript() {
+	wp_enqueue_script('bluerobotics-wp-guides', plugins_url('bluerobotics-wp-guides/js/guideMigration.js'));
+}
+// load the scripts on only the plugin admin page 
+//if (is_page('Guide Migration')) { 
+    // if we are on the plugin page, enable the script
+	add_action('wp_enqueue_scripts', 'migration_javascript');
+//}
 
 ?>
