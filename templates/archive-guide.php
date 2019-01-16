@@ -16,13 +16,17 @@
     	<div class="entry-content row">   
 <?php while (have_posts()) : the_post(); ?>
 	    	<div class="col-md-3">
-	    		<a href="<?php echo esc_url( get_permalink() ); ?>">
-		    		<?php the_post_thumbnail( 'shop_catalog', ['class' => 'img-responsive img-guide-archive'] ); ?>
-		    		<h3 class="product-title"><?php the_title(); ?></h3>
-	    		</a>
-	    		<span style="font-size:0.9em;color:#666;"><?php echo date('j F Y',strtotime(get_the_date())); ?></span>
-	    		<p><?php the_excerpt(); ?></p>
-	      	</div>
+          <div class="guide-card-wrapper">
+  	    		<a href="<?php echo esc_url( get_permalink() ); ?>">
+              <div class="guide-card-thumbnail-wrapper">
+  		    		  <?php the_post_thumbnail( 'shop_catalog', ['class' => 'img-responsive img-guide-archive'] ); ?>
+              </div>
+  		    		<h3 class="product-title"><?php the_title(); ?></h3>
+  	    		</a>
+  	    		<span style="font-size:0.9em;color:#666;"><?php echo date('j F Y',strtotime(get_the_date())); ?></span>
+  	    		<p><?php the_excerpt(); ?></p>
+  	      	</div>
+          </div>
 <?php endwhile; ?>
 		</div>
 	</div>

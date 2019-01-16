@@ -67,7 +67,7 @@ h1.anchor-heading {
 }
 
 .img-guide-archive {
-	border: #ddd solid 1px;
+	/*border: #ddd solid 1px;*/
 }
 
 .guide-image-caption {
@@ -84,11 +84,22 @@ h1.anchor-heading {
 }
 
 .guide-product-featured ul.products li.product {
-	margin: 0 3.8% 1em 0 !important;
+	margin: 0 1em 1em 0 !important;
 }
 
 .guide-product ul.products li.product {
-	margin: 0 3.8% 1em 0 !important;
+	margin: 0 1em 1em 0 !important;
+}
+
+.guide-card-wrapper {
+	height: 450px;
+	margin-bottom: 20px;
+}
+
+.guide-card-thumbnail-wrapper {
+	/*padding-top: 100%;
+	width: 100%;*/
+	border: #ddd solid 1px;
 }
 
 .list-group-item.tags {
