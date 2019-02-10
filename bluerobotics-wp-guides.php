@@ -5,7 +5,7 @@
  * Description: Simple guide post generator for documentation on Blue Robotics website.
  * Author: Rustom Jehangir
  * Author URI: http://rstm.io
- * Version: 0.2.0
+ * Version: 0.2.1
  *
  * Copyright: (c) 2019 Rustom Jehangir
  *
@@ -109,7 +109,7 @@ function is_learn() {
 /* Set number of posts on the archive */
 function set_posts_per_page_for_learn( $query ) {
   if ( !is_admin() && $query->is_main_query() && is_post_type_archive( 'learn' ) ) {
-    $query->set( 'posts_per_page', '30' );
+    $query->set( 'posts_per_page', '24' );
   }
 }
 add_action( 'pre_get_posts', 'set_posts_per_page_for_learn' );
