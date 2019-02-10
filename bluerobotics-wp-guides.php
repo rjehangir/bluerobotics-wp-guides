@@ -5,7 +5,7 @@
  * Description: Simple guide post generator for documentation on Blue Robotics website.
  * Author: Rustom Jehangir
  * Author URI: http://rstm.io
- * Version: 0.0.2
+ * Version: 0.1.0
  *
  * Copyright: (c) 2019 Rustom Jehangir
  *
@@ -17,9 +17,6 @@
 
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-
-// Hook br_guide_post() to the init action hook
-add_action( 'init', 'br_guide_post' );
 
 $guide_nav_items = array();
 
@@ -62,9 +59,10 @@ function br_guide_post() {
   // Parameter 2 is the $args array
 	register_post_type( 'learn', $args);
 }
+// Hook br_guide_post() to the init action hook
+add_action( 'init', 'br_guide_post' );
 
 // hook into the init action and call create_guide_tag_taxonomy when it fires
-add_action( 'init', 'create_guide_tag_taxonomy', 0 );
 function create_guide_tag_taxonomy() {
 	// Labels part for the GUI
 	$labels = array(
@@ -96,6 +94,7 @@ function create_guide_tag_taxonomy() {
 		'rewrite' => array( 'slug' => 'guide-tag' ),
 	));
 }
+add_action( 'init', 'create_guide_tag_taxonomy', 0 );
 
 function is_learn() {
 	global $post;
@@ -108,8 +107,6 @@ function is_learn() {
 }
 
 /* Filter the single_template with our custom function*/
-add_filter('single_template', 'guide_single_template', 99);
-
 function guide_single_template($single) {
 	global $post;
 
@@ -121,10 +118,9 @@ function guide_single_template($single) {
 	}
 	return $single;
 }
+add_filter('single_template', 'guide_single_template', 99);
 
 /* Filter the archive_template with our custom function*/
-add_filter('archive_template', 'guide_archive_template', 99);
-
 function guide_archive_template($archive) {
 	global $post;
 
@@ -136,9 +132,7 @@ function guide_archive_template($archive) {
 	}
 	return $archive;
 }
-
-// Register style sheet.
-add_action( 'wp_enqueue_scripts', 'register_plugin_styles' );
+add_filter('archive_template', 'guide_archive_template', 99);
 
 /**
  * Register style sheet.
@@ -147,6 +141,7 @@ function register_plugin_styles() {
 	wp_register_style( 'bluerobotics-wp-guides', plugins_url( 'bluerobotics-wp-guides/css/style.css' ) );
 	wp_enqueue_style( 'bluerobotics-wp-guides' );
 }
+add_action( 'wp_enqueue_scripts', 'register_plugin_styles' );
 
 /**
  * Add meta box on post editor.
@@ -190,14 +185,6 @@ function guide_meta_box_save_fields( $post_id ) {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return $post_id;
 	}
-	// check permissions
-	// if ( 'page' === $_POST['post_type'] ) {
-	// 	if ( !current_user_can( 'edit_page', $post_id ) ) {
-	// 		return $post_id;
-	// 	} elseif ( !current_user_can( 'edit_post', $post_id ) ) {
-	// 		return $post_id;
-	// 	}  
-	// }
 	
 	$old = get_post_meta( $post_id, 'guide_forum_link', true );
 	$new = $_POST['guide_forum_link_field'];
@@ -476,13 +463,89 @@ function guide_button_func($atts = [], $content = null) {
 }
 add_shortcode( 'guide_button', 'guide_button_func');
 
+/**
+ * Output a guide card.
+ */
+function guide_card_func($atts = [], $content = null) {
+	// normalize attribute keys, lowercase
+	$atts = array_change_key_case((array)$atts, CASE_LOWER);
+
+	$atts = shortcode_atts( array(
+		'ids' => '',
+		'slugs' => '',
+		'columns' => '4'
+	), $atts, $tag );
+
+	$guide_ids = explode(",",$atts['ids']);
+	$slugs = explode(",",$atts['slugs']);
+	$columns = $atts['columns'];
+	$col_class = 'col-md-'.floor(12/$columns);
+
+	foreach ($slugs as $slug) {
+		$page = get_page_by_path(trim($slug), OBJECT, 'learn');
+		if ($page) {
+			array_push($guide_ids,$page->ID);
+		}
+	}
+
+	$output = '';
+	$output .= '<div class="row guide-card-row">';
+
+	foreach ($guide_ids as $guide_id) {
+		if ($guide_id) {
+			$post = get_post($guide_id);
+		}
+
+		if ($post) {
+			$output .= '<div class="'.$col_class.'">';		
+			$output .= '<div class="guide-card-wrapper">';
+	  	    $output .= '<a href="'.get_the_permalink($guide_id).'">';
+	  	    $output .= '<div class="guide-card-thumbnail-wrapper">';
+	  		$output .= get_the_post_thumbnail($guide_id, 'shop_catalog', ['class' => 'img-responsive img-guide-archive'] );
+	        $output .= '</div><h3 class="product-title">'.get_the_title($guide_id).'</h3>';
+	  	    $output .= '</a>';
+	  	    $output .= '<span style="font-size:0.9em;color:#666;">'.date('j F Y',strtotime(get_the_date())).'</span>
+	  	    		<p>'.get_the_excerpt($guide_id).'</p></div>';
+			$output .= '</div>';
+		}
+	}
+
+	$output .= '</div>';
+	return $output;
+}
+add_shortcode( 'guide_card', 'guide_card_func');
+
+/**
+ * Output a guide card.
+ */
+function guide_code_func($atts = [], $content = null) {
+	// normalize attribute keys, lowercase
+	$atts = array_change_key_case((array)$atts, CASE_LOWER);
+
+	$atts = shortcode_atts( array(
+		'language' => ''
+	), $atts, $tag );
+
+	$language = $atts['language'];
+
+	if ( !is_null($content) ) {
+		$output = '';
+		$output .= '<pre class="guide-code">';
+		$output .= $content;
+		$output .= '</pre>';
+		return $output;
+	}
+	return $content;
+}
+add_shortcode( 'guide_code', 'guide_code_func');
+
 function migration_javascript() {
 	wp_enqueue_script('bluerobotics-wp-guides', plugins_url('bluerobotics-wp-guides/js/guideMigration.js'));
 }
 // load the scripts on only the plugin admin page 
-//if (is_page('Guide Migration')) { 
+if (is_page('Guide Migration')) { 
     // if we are on the plugin page, enable the script
 	add_action('wp_enqueue_scripts', 'migration_javascript');
-//}
+}
 
 ?>
