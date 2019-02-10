@@ -29,6 +29,18 @@
           </div>
 <?php endwhile; ?>
 		</div>
+    <!-- Pagination Goes Here -->
+    <div class="row">
+      <div class="small-12 columns">
+      <?php
+        the_posts_pagination( array(
+            'mid_size'  => 2,
+            'prev_text' => 'Previous',
+            'next_text' => 'Next',
+        ) );
+      ?>
+      </div>
+    </div>
 	</div>
 	<div class="col-md-3">
   		<div data-spy="affix" data-offset-top="170" style="width:291px">
