@@ -5,7 +5,7 @@
  * Description: Simple guide post generator for documentation on Blue Robotics website.
  * Author: Rustom Jehangir
  * Author URI: http://rstm.io
- * Version: 0.1.0
+ * Version: 0.1.1
  *
  * Copyright: (c) 2019 Rustom Jehangir
  *
@@ -348,23 +348,27 @@ function guide_image_func( $atts, $content = null, $tag = '' ) {
 	$alt = $atts['alt'];
 	$caption = $atts['caption'];
 
-	$id = pn_get_attachment_id_from_url($src);
+	$image_id = pn_get_attachment_id_from_url($src);
 
-	if ( $id > 0 ) {
-		$image_atts = wp_get_attachment_image_src( $id, 'large' );
+	$src_full = $src;
+
+	if ( $image_id > 0 ) {
+		$image_atts = wp_get_attachment_image_src( $image_id, 'large' );
 		$src = $image_atts[0];
+		$image_atts = wp_get_attachment_image_src( $image_id, 'full' );
+		$src_full = $image_atts[0];
 	}
 
 	if ( $alt == '' ) {
 		if ( $caption == '' ) {
-			$alt = get_the_title($id);
+			$alt = get_the_title($image_id);
 		} else {
 			$alt = $caption;
 		}
 	}
 
 	$output = '';
-	$output .= '<div class="guide-image-wrapper"><a href="'.$src.'"><img src="'.$src.'" alt="'.$alt.'" class="img-responsive img-center no-lazy-load img-guide" /></a>';
+	$output .= '<div class="guide-image-wrapper"><a href="'.$src_full.'"><img src="'.$src.'" alt="'.$alt.'" class="img-responsive img-center no-lazy-load img-guide" /></a>';
 	
 	if ( $caption != '' ) {
 		$output .= '<p class="guide-image-caption text-center">'.$caption.'</p>';
@@ -388,16 +392,17 @@ function pn_get_attachment_id_from_url( $attachment_url = '' ) {
 		return;
  
 	// Get the upload directory paths
-	$upload_dir_paths = wp_upload_dir();
+	$upload_dir_paths = 'wp-content/uploads';
  
 	// Make sure the upload path base directory exists in the attachment URL, to verify that we're working with a media library image
-	if ( false !== strpos( $attachment_url, $upload_dir_paths['baseurl'] ) ) {
+	if ( false !== strpos( $attachment_url, $upload_dir_paths ) ) {
  
 		// If this is the URL of an auto-generated thumbnail, get the URL of the original image
 		$attachment_url = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $attachment_url );
- 
+
 		// Remove the upload path base directory from the attachment URL
-		$attachment_url = str_replace( $upload_dir_paths['baseurl'] . '/', '', $attachment_url );
+		//$attachment_url = str_replace( $upload_dir_paths['baseurl'] . '/', '', $attachment_url );
+		$attachment_url = preg_replace( '/(.*\/wp-content\/uploads\/)/i', '', $attachment_url );
  
 		// Finally, run a custom database query to get the attachment ID from the modified attachment URL
 		$attachment_id = $wpdb->get_var( $wpdb->prepare( "SELECT wposts.ID FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta WHERE wposts.ID = wpostmeta.post_id AND wpostmeta.meta_key = '_wp_attached_file' AND wpostmeta.meta_value = '%s' AND wposts.post_type = 'attachment'", $attachment_url ) );
