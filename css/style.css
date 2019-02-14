@@ -64,6 +64,7 @@ h1.anchor-heading {
 
 .img-guide {
 	max-width: 90% !important;
+	max-height: 35em; 
 }
 
 .img-guide-archive {
