@@ -5,7 +5,7 @@
  * Description: Simple guide post generator for documentation on Blue Robotics website.
  * Author: Rustom Jehangir
  * Author URI: http://rstm.io
- * Version: 0.2.2
+ * Version: 0.2.3
  *
  * Copyright: (c) 2019 Rustom Jehangir
  *
