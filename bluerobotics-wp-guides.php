@@ -521,8 +521,7 @@ function guide_card_func($atts = [], $content = null) {
 	  		$output .= get_the_post_thumbnail($guide_id, 'shop_catalog', ['class' => 'img-responsive img-guide-archive'] );
 	        $output .= '</div><h3 class="product-title">'.get_the_title($guide_id).'</h3>';
 	  	    $output .= '</a>';
-	  	    $output .= '<span style="font-size:0.9em;color:#666;">'.date('j F Y',strtotime(get_the_date())).'</span>
-	  	    		<p>'.get_the_excerpt($guide_id).'</p></div>';
+	  	    $output .= '<p>'.get_the_excerpt($guide_id).'</p></div>';
 			$output .= '</div>';
 		}
 	}

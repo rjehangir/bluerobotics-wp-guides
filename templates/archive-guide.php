@@ -23,7 +23,6 @@
               </div>
   		    		<h3 class="product-title"><?php the_title(); ?></h3>
   	    		</a>
-  	    		<span style="font-size:0.9em;color:#666;"><?php echo date('j F Y',strtotime(get_the_date())); ?></span>
   	    		<p><?php the_excerpt(); ?></p>
   	      	</div>
           </div>
