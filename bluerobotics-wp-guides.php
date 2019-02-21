@@ -179,6 +179,10 @@ function guide_meta_box_html($post)
 	<label for="guide_forum_link_field">Blue Robotics Discuss Forum URL: </label>
 	<input type="text" name="guide_forum_link_field" id="guide_forum_link_field" class="regular-text" value="<?php echo get_post_meta( $post->ID, 'guide_forum_link', true ); ?>" style="width:500px" />
 	<?php
+	$args = array(
+    'show_option_all'         => null,
+	'multi'                   => true);
+	wp_dropdown_users( $args );
 }
 
 /**
@@ -544,13 +548,22 @@ function guide_code_func($atts = [], $content = null) {
 	if ( !is_null($content) ) {
 		$output = '';
 		$output .= '<pre class="guide-code">';
-		$output .= $content;
+		$output .= htmlspecialchars(removesmartquotes($content));
 		$output .= '</pre>';
 		return $output;
 	}
 	return $content;
 }
 add_shortcode( 'guide_code', 'guide_code_func');
+
+function removesmartquotes($content) {
+     $content = str_replace('&#8220;', '"', $content);
+     $content = str_replace('&#8221;', '"', $content);
+     $content = str_replace('&#8216;', '\'', $content);
+     $content = str_replace('&#8217;', '\'', $content);
+    
+     return $content;
+}
 
 function migration_javascript() {
 	wp_enqueue_script('bluerobotics-wp-guides', plugins_url('bluerobotics-wp-guides/js/guideMigration.js'));
