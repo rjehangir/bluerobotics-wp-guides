@@ -121,8 +121,8 @@ h1.anchor-heading {
 }
 
 .guide-card-wrapper {
-	height: 450px;
-	margin-bottom: 20px;
+	/*height: 450px;*/
+	margin-bottom: 40px;
 }
 
 .guide-card-thumbnail-wrapper {
@@ -130,6 +130,7 @@ h1.anchor-heading {
 }
 
 .guide-card-row {
+	margin-right: 4px !important;
 	margin-top:15px;
 }
 

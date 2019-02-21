@@ -529,7 +529,6 @@ function guide_card_func($atts = [], $content = null) {
 
 		while ( $tagged_guides->have_posts() ) {
 			$tagged_guides->the_post();
-			echo get_the_id()." ";
 			array_push($guide_ids,get_the_id());
 		}
 
