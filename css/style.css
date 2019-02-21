@@ -137,17 +137,19 @@ h1.anchor-heading {
 	padding-bottom: 5px;
 }
 
-.list-group-item .label {
+.guide-tag .label {
 	display: inline-block;
 	margin-bottom:5px;
 	line-height: inherit;
+	background-color: #2699d0;
+	border: none;
 }
 
-.list-group-item .label:hover {
+.guide-tag .label:hover {
 	background: #2A6496;
 }
 
-.list-group-item .label-primary a {
+.guide-tag .label-primary a {
 	color: white;
 	font-weight: 600;
 	text-decoration: none;

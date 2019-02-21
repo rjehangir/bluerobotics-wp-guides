@@ -237,7 +237,7 @@ function get_guide_nav() {
 	if ( $tags != '' ) {
 		echo '<nav class="listnav"><ul class="list-group nav">';
 		echo '<li class="list-group-item"><strong>Tags</strong></li>';
-		echo '<li class="list-group-item tags">';
+		echo '<li class="list-group-item guide-tag tags">';
 		echo $tags;
 		echo '</li>';
 		echo '</ul></nav>';
@@ -260,7 +260,7 @@ function get_guide_archive_nav() {
 	if ( $tags != '' ) {
 		echo '<nav class="listnav"><ul class="list-group nav">';
 		echo '<li class="list-group-item"><strong>Tags</strong></li>';
-		echo '<li class="list-group-item tags">';
+		echo '<li class="list-group-item guide-tag tags">';
 		foreach ( $tags as $tag ) {
 			echo '<span class="label label-primary"><a href="'.get_term_link( $tag->slug, $tag->taxonomy ).'">'.$tag->name.'</a></span> ';
 		}
