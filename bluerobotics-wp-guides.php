@@ -490,13 +490,18 @@ function guide_card_func($atts = [], $content = null) {
 	$atts = shortcode_atts( array(
 		'ids' => '',
 		'slugs' => '',
-		'columns' => '4'
+		'tags' => '',
+		'columns' => '4',
+		'max_rows' => '1'
 	), $atts, $tag );
 
 	$guide_ids = explode(",",$atts['ids']);
 	$slugs = explode(",",$atts['slugs']);
+	$tags = explode(",",$atts['tags']);
 	$columns = $atts['columns'];
+	$max_rows = $atts['max_rows'];
 	$col_class = 'col-md-'.floor(12/$columns);
+	$max = $max_rows*$columns;
 
 	foreach ($slugs as $slug) {
 		$page = get_page_by_path(trim($slug), OBJECT, 'learn');
@@ -505,8 +510,36 @@ function guide_card_func($atts = [], $content = null) {
 		}
 	}
 
+	// Get all posts with the right tag, if necessary
+	if ( $tags != '' ) {
+		$args = array(
+		    'post_type' => 'learn',
+		    'tax_query' => array(
+				array(
+				    'taxonomy' => 'guide_tags',
+				    'field' => 'slug',
+				    'terms' => $tags
+				)
+			),
+		    'orderby' => 'order',
+		    'order' => 'ASC'
+		);
+
+		$tagged_guides = new WP_Query( $args );
+
+		while ( $tagged_guides->have_posts() ) {
+			$tagged_guides->the_post();
+			echo get_the_id()." ";
+			array_push($guide_ids,get_the_id());
+		}
+
+		wp_reset_query();
+	}
+
 	$output = '';
 	$output .= '<div class="row guide-card-row">';
+
+	$count = 0;
 
 	foreach ($guide_ids as $guide_id) {
 		if ($guide_id) {
@@ -523,6 +556,11 @@ function guide_card_func($atts = [], $content = null) {
 	  	    $output .= '</a>';
 	  	    $output .= '<p>'.get_the_excerpt($guide_id).'</p></div>';
 			$output .= '</div>';
+		}
+
+		$count += 1;
+		if ($count == $max) {
+			break;
 		}
 	}
 
