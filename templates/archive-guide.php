@@ -7,13 +7,23 @@
       if (strpos($title, 'Tag') !== false) {
       	// Keep it.
       } else {
-      	$title = "Guides and Tutorials";
+      	$title = "All Guides and Tutorials";
       }
       ?>
-      <h1 class="entry-title"><?php echo $title; ?></h1>
+      
     </header>
     <div class="col-md-9 no-padding">
-    	<div class="entry-content row">   
+    	<div class="entry-content row">  
+      <?php 
+      // OUTPUT SPECIAL TAG CATEGORIES
+      if (!get_query_var('paged') && !(strpos($title, 'Tag') !== false)) {
+        echo '<p class="home-heading">BlueROV2<a href="/guide-tag/bluerov2/">See All <i class="fa fa-arrow-circle-right fa-fw"></i></a></p>';
+        echo do_shortcode('[guide_card tags="bluerov2" columns="4" max_rows="2"]');
+      } ?>
+
+      <!-- OUTPUT ALL GUIDES -->
+      <p class="home-heading"><?php echo $title; ?></p>
+      <div class="row guide-card-row">
 <?php while (have_posts()) : the_post(); ?>
 	    	<div class="col-md-3">
           <div class="guide-card-wrapper">
@@ -23,11 +33,11 @@
               </div>
   		    		<h3 class="product-title"><?php the_title(); ?></h3>
   	    		</a>
-  	    		<span style="font-size:0.9em;color:#666;"><?php echo date('j F Y',strtotime(get_the_date())); ?></span>
   	    		<p><?php the_excerpt(); ?></p>
   	      	</div>
           </div>
 <?php endwhile; ?>
+      </div>
 		</div>
     <!-- Pagination Goes Here -->
     <div class="row">

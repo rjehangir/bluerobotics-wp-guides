@@ -179,6 +179,10 @@ function guide_meta_box_html($post)
 	<label for="guide_forum_link_field">Blue Robotics Discuss Forum URL: </label>
 	<input type="text" name="guide_forum_link_field" id="guide_forum_link_field" class="regular-text" value="<?php echo get_post_meta( $post->ID, 'guide_forum_link', true ); ?>" style="width:500px" />
 	<?php
+	$args = array(
+    'show_option_all'         => null,
+	'multi'                   => true);
+	wp_dropdown_users( $args );
 }
 
 /**
@@ -486,13 +490,18 @@ function guide_card_func($atts = [], $content = null) {
 	$atts = shortcode_atts( array(
 		'ids' => '',
 		'slugs' => '',
-		'columns' => '4'
+		'tags' => '',
+		'columns' => '4',
+		'max_rows' => '1'
 	), $atts, $tag );
 
 	$guide_ids = explode(",",$atts['ids']);
 	$slugs = explode(",",$atts['slugs']);
+	$tags = explode(",",$atts['tags']);
 	$columns = $atts['columns'];
+	$max_rows = $atts['max_rows'];
 	$col_class = 'col-md-'.floor(12/$columns);
+	$max = $max_rows*$columns;
 
 	foreach ($slugs as $slug) {
 		$page = get_page_by_path(trim($slug), OBJECT, 'learn');
@@ -501,8 +510,35 @@ function guide_card_func($atts = [], $content = null) {
 		}
 	}
 
+	// Get all posts with the right tag, if necessary
+	if ( $tags != '' ) {
+		$args = array(
+		    'post_type' => 'learn',
+		    'tax_query' => array(
+				array(
+				    'taxonomy' => 'guide_tags',
+				    'field' => 'slug',
+				    'terms' => $tags
+				)
+			),
+		    'orderby' => 'order',
+		    'order' => 'ASC'
+		);
+
+		$tagged_guides = new WP_Query( $args );
+
+		while ( $tagged_guides->have_posts() ) {
+			$tagged_guides->the_post();
+			array_push($guide_ids,get_the_id());
+		}
+
+		wp_reset_query();
+	}
+
 	$output = '';
 	$output .= '<div class="row guide-card-row">';
+
+	$count = 0;
 
 	foreach ($guide_ids as $guide_id) {
 		if ($guide_id) {
@@ -517,9 +553,13 @@ function guide_card_func($atts = [], $content = null) {
 	  		$output .= get_the_post_thumbnail($guide_id, 'shop_catalog', ['class' => 'img-responsive img-guide-archive'] );
 	        $output .= '</div><h3 class="product-title">'.get_the_title($guide_id).'</h3>';
 	  	    $output .= '</a>';
-	  	    $output .= '<span style="font-size:0.9em;color:#666;">'.date('j F Y',strtotime(get_the_date())).'</span>
-	  	    		<p>'.get_the_excerpt($guide_id).'</p></div>';
+	  	    $output .= '<p>'.get_the_excerpt($guide_id).'</p></div>';
 			$output .= '</div>';
+		}
+
+		$count += 1;
+		if ($count == $max) {
+			break;
 		}
 	}
 
@@ -544,13 +584,22 @@ function guide_code_func($atts = [], $content = null) {
 	if ( !is_null($content) ) {
 		$output = '';
 		$output .= '<pre class="guide-code">';
-		$output .= $content;
+		$output .= htmlspecialchars(removesmartquotes($content));
 		$output .= '</pre>';
 		return $output;
 	}
 	return $content;
 }
 add_shortcode( 'guide_code', 'guide_code_func');
+
+function removesmartquotes($content) {
+     $content = str_replace('&#8220;', '"', $content);
+     $content = str_replace('&#8221;', '"', $content);
+     $content = str_replace('&#8216;', '\'', $content);
+     $content = str_replace('&#8217;', '\'', $content);
+    
+     return $content;
+}
 
 function migration_javascript() {
 	wp_enqueue_script('bluerobotics-wp-guides', plugins_url('bluerobotics-wp-guides/js/guideMigration.js'));
