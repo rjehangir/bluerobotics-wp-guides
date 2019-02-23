@@ -18,7 +18,7 @@
       // OUTPUT SPECIAL TAG CATEGORIES
       if (!get_query_var('paged') && !(strpos($title, 'Tag') !== false)) {
         echo '<p class="home-heading">BlueROV2<a href="/guide-tag/bluerov2/">See All <i class="fa fa-arrow-circle-right fa-fw"></i></a></p>';
-        echo do_shortcode('[guide_card tags="bluerov2" columns="4" max_rows="2"]');
+        echo do_shortcode('[guide_card tags="bluerov2" columns="4" max_rows="1"]');
       } ?>
 
       <!-- OUTPUT ALL GUIDES -->
