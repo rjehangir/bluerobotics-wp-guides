@@ -281,10 +281,12 @@ function guide_heading_func( $atts, $content = null, $tag = '' ) {
 
 	$atts = shortcode_atts( array(
 		'title' => 'Title Placeholder',
-		'nav_title' => ''
+		'nav_title' => '',
+		'show_in_nav' => 'true'
 	), $atts, $tag );
 
 	$title = $atts['title'];
+	$show_in_nav = $atts['show_in_nav'];
 	$anchor = strtolower(preg_replace("/[^A-Za-z0-9 ]/", '', $atts['title']));
 	$anchor = str_replace(' ', '-', $anchor);
 	$nav_title = $title;
@@ -294,7 +296,9 @@ function guide_heading_func( $atts, $content = null, $tag = '' ) {
 
 	$item = array("title" => $title, "anchor" => $anchor, "nav_title" => $nav_title);
 
-	array_push($guide_nav_items, $item);
+	if ( $show_in_nav == 'true' ) {
+		array_push($guide_nav_items, $item);
+	}
 
 	$output = '';
 	$output .= '<h1  class="anchor-heading" id="' . $anchor . '">';
