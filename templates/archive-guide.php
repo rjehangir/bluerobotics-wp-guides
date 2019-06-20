@@ -1,15 +1,19 @@
 <article <?php post_class(); ?>>
+    <?php 
+    $title = get_the_archive_title();
+    if (strpos($title, 'Tag') !== false) {
+      // Keep it.
+    } else {
+      $title = "All Guides and Tutorials";
+    }
+    ?>
     <header>
       <br />
-      <span class="woocommerce"><?php woocommerce_breadcrumb(); ?></span>
-      <?php 
-      $title = get_the_archive_title();
-      if (strpos($title, 'Tag') !== false) {
-      	// Keep it.
-      } else {
-      	$title = "All Guides and Tutorials";
-      }
-      ?>
+      <span class="woocommerce"><nav class="woocommerce-breadcrumb">
+        <a href="/">Home</a>&nbsp;/&nbsp;
+        <a href="/learn">Guides</a>&nbsp;/&nbsp;
+        <?php echo $title; ?>
+      </nav></span>
       
     </header>
     <div class="col-md-9 no-padding">

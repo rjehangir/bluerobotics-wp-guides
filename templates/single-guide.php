@@ -2,7 +2,11 @@
   <article <?php post_class(); ?>>
     <header>
       <br />
-      <span class="woocommerce"><?php woocommerce_breadcrumb(); ?></span>
+      <span class="woocommerce"><nav class="woocommerce-breadcrumb">
+        <a href="/">Home</a>&nbsp;/&nbsp;
+        <a href="/learn">Guides</a>&nbsp;/&nbsp;
+        <?php echo get_the_title(); ?>
+      </nav></span>
     </header>
     <div class="entry-content">    	
     	<div id="guide-content" class="col-sm-9 no-padding">
