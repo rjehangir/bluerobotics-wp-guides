@@ -564,7 +564,7 @@ function guide_card_func($atts = [], $content = null) {
 		}
 
 		$count += 1;
-		if ($count == $max) {
+		if ($count > $max) {
 			break;
 		}
 	}
