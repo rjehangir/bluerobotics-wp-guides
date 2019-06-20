@@ -100,8 +100,10 @@ function is_learn() {
 	global $post;
 
 	/* Checks for single template by post type */
-	if ( $post->post_type == 'learn' ) {
-		return true;
+	if ( $post ) {
+		if ( $post->post_type == 'learn' ) {
+			return true;
+		}
 	}
 	return false;
 }
