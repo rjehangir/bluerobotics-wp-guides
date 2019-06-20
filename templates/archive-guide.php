@@ -24,7 +24,7 @@
       <!-- OUTPUT ALL GUIDES -->
       <p class="home-heading"><?php echo $title; ?></p>
       <div class="row guide-card-row">
-<?php while (have_posts()) : the_post(); ?>
+<?php while (have_posts()) : the_post(); if (get_post_status() != 'private') : ?>
 	    	<div class="col-md-3">
           <div class="guide-card-wrapper">
   	    		<a href="<?php echo esc_url( get_permalink() ); ?>">
@@ -36,7 +36,7 @@
   	    		<p><?php the_excerpt(); ?></p>
   	      	</div>
           </div>
-<?php endwhile; ?>
+<?php endif; endwhile; ?>
       </div>
 		</div>
     <!-- Pagination Goes Here -->

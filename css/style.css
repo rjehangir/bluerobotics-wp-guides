@@ -127,6 +127,7 @@ h1.anchor-heading {
 
 .guide-card-thumbnail-wrapper {
 	border: #ddd solid 1px;
+	height: 200px;
 }
 
 .guide-card-row {
