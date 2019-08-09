@@ -178,13 +178,52 @@ function guide_meta_box_html($post)
 	?>
 	<input type="hidden" name="guide_meta_box_nonce" value="<?php echo wp_create_nonce( basename(__FILE__) ); ?>">
 
-	<label for="guide_forum_link_field">Blue Robotics Discuss Forum URL: </label>
-	<input type="text" name="guide_forum_link_field" id="guide_forum_link_field" class="regular-text" value="<?php echo get_post_meta( $post->ID, 'guide_forum_link', true ); ?>" style="width:500px" />
+	<p><label for="guide_forum_link_field">Blue Robotics Discuss Forum URL: </label>
+	<input type="text" name="guide_forum_link_field" id="guide_forum_link_field" class="regular-text" value="<?php echo get_post_meta( $post->ID, 'guide_forum_link', true ); ?>" style="width:500px" /></p>
+	<p><label for="guide_author1_id_field">Guide Author #1: </label>
 	<?php
 	$args = array(
-    'show_option_all'         => null,
-	'multi'                   => true);
+	    'show_option_all'         => null,
+	    'show_option_none'        => 'None',
+		'multi'                   => true,
+		'show'                    => 'display_name',
+		'name'                    => 'guide_author1_id_field',
+		'id'                      => 'guide_author1_id_field',
+		'role__in'                => array('author','administrator','shop_manager'),
+		'selected'                => get_post_meta( $post->ID, 'guide_author1_id', true ) );
 	wp_dropdown_users( $args );
+	?>
+	</p>
+	<p><label for="guide_author2_id_field">Guide Author #2: </label>
+	<?php
+	$args = array(
+	    'show_option_all'         => null,
+	    'show_option_none'        => 'None',
+		'multi'                   => true,
+		'show'                    => 'display_name',
+		'name'                    => 'guide_author2_id_field',
+		'id'                      => 'guide_author2_id_field',
+		'role__in'                => array('author','administrator','shop_manager'),
+		'selected'                => get_post_meta( $post->ID, 'guide_author2_id', true ) );
+	wp_dropdown_users( $args );
+	?>
+	</p>
+	<p><label for="guide_author3_id_field">Guide Author #3: </label>
+	<?php
+	$args = array(
+	    'show_option_all'         => null,
+	    'show_option_none'        => 'None',
+		'multi'                   => true,
+		'show'                    => 'display_name',
+		'name'                    => 'guide_author3_id_field',
+		'id'                      => 'guide_author3_id_field',
+		'role__in'                => array('author','administrator','shop_manager'),
+		'selected'                => get_post_meta( $post->ID, 'guide_author3_id', true )
+	);
+	wp_dropdown_users( $args );
+	?>
+	</p>
+	<?php
 }
 
 /**
@@ -199,17 +238,24 @@ function guide_meta_box_save_fields( $post_id ) {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return $post_id;
 	}
-	
-	$old = get_post_meta( $post_id, 'guide_forum_link', true );
-	$new = $_POST['guide_forum_link_field'];
 
-	if ( $new && $new !== $old ) {
-		update_post_meta( $post_id, 'guide_forum_link', $new );
-	} elseif ( '' === $new && $old ) {
-		delete_post_meta( $post_id, 'guide_forum_link', $old );
-	}
+	save_guide_meta_field($post_id, 'guide_forum_link');
+	save_guide_meta_field($post_id, 'guide_author1_id');
+	save_guide_meta_field($post_id, 'guide_author2_id');
+	save_guide_meta_field($post_id, 'guide_author3_id');
 }
 add_action( 'save_post', 'guide_meta_box_save_fields' );
+
+function save_guide_meta_field($post_id, $field_name) {
+	$old = get_post_meta( $post_id, $field_name, true );
+	$new = $_POST[$field_name.'_field'];
+
+	if ( $new && $new !== $old ) {
+		update_post_meta( $post_id, $field_name, $new );
+	} elseif ( '' === $new && $old ) {
+		delete_post_meta( $post_id, $field_name, $old );
+	}
+}
 
 /**
  * Output the side bar navigation menu for the theme.
