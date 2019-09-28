@@ -405,12 +405,16 @@ function guide_image_func( $atts, $content = null, $tag = '' ) {
 	$atts = shortcode_atts( array(
 		'src' => '',
 		'alt' => '',
-		'caption' => ''
+		'caption' => '',
+		'width' => '',
+		'height' => ''
 	), $atts, $tag );
 
 	$src = $atts['src'];
 	$alt = $atts['alt'];
 	$caption = $atts['caption'];
+	$width = $atts['width'];
+	$height = $atts['height'];
 
 	$image_id = pn_get_attachment_id_from_url($src);
 
@@ -431,8 +435,20 @@ function guide_image_func( $atts, $content = null, $tag = '' ) {
 		}
 	}
 
+	if ( $width == '' ) {
+		$width = '';
+	} else {
+		$width = 'max-width:'.$width.' !important;';
+	}
+
+	if ( $height == '' ) {
+		$height = '';
+	} else {
+		$height = 'max-height:'.$height.' !important;';
+	}
+
 	$output = '';
-	$output .= '<div class="guide-image-wrapper"><a href="'.$src_full.'"><img src="'.$src.'" alt="'.$alt.'" class="img-responsive img-center no-lazy-load img-guide" /></a>';
+	$output .= '<div class="guide-image-wrapper"><a href="'.$src_full.'"><img src="'.$src.'" alt="'.$alt.'" class="img-responsive img-center no-lazy-load img-guide" style="'.$width.$height.'" /></a>';
 	
 	if ( $caption != '' ) {
 		$output .= '<p class="guide-image-caption text-center">'.$caption.'</p>';
