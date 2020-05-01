@@ -5,7 +5,7 @@
  * Description: Simple guide post generator for documentation on Blue Robotics website.
  * Author: Rustom Jehangir
  * Author URI: http://rstm.io
- * Version: 0.2.5
+ * Version: 0.2.4
  *
  * Copyright: (c) 2019 Rustom Jehangir
  *
@@ -147,11 +147,11 @@ add_filter('archive_template', 'guide_archive_template', 99);
 /**
  * Register style sheet.
  */
-function register_plugin_styles() {
+function guide_register_plugin_styles() {
 	wp_register_style( 'bluerobotics-wp-guides', plugins_url( 'bluerobotics-wp-guides/css/style.css' ) );
 	wp_enqueue_style( 'bluerobotics-wp-guides' );
 }
-add_action( 'wp_enqueue_scripts', 'register_plugin_styles' );
+add_action( 'wp_enqueue_scripts', 'guide_register_plugin_styles' );
 
 /**
  * Add meta box on post editor.
@@ -268,14 +268,14 @@ function get_guide_nav() {
 
 	$tags = get_the_term_list( $post->ID, 'guide_tags', '<span class="label label-primary">', '</span> <span class="label label-primary">', '</span>' );
 
-	echo '<nav class="guidenav listnav"><ul class="list-group nav">';
+	echo '<nav class="guides guidenav listnav"><ul class="list-group nav">';
 	echo '<li class="list-group-item"><strong>Navigation</strong></li>';
 	foreach ($guide_nav_items as $item) {
 		echo '<li class="list-group-item nav-link"><a href="#'.$item["anchor"].'">'.$item["nav_title"].'</a></li>';
 	}
 	echo '</ul></nav>';
 
-	echo '<nav class="listnav"><ul class="list-group nav">';
+	echo '<nav class="guides listnav"><ul class="list-group nav">';
 	if ( $guide_link != '' ) {
 		echo '<li class="list-group-item nav-link"><a href="'.$guide_link.'"><i class="fa fa-fw fa-users" aria-hidden="true"></i> Forum</a></li>';
 	}
@@ -283,7 +283,7 @@ function get_guide_nav() {
 	echo '</ul></nav>';
 
 	if ( $tags != '' ) {
-		echo '<nav class="listnav"><ul class="list-group nav">';
+		echo '<nav class="guides listnav"><ul class="list-group nav">';
 		echo '<li class="list-group-item"><strong>Tags</strong></li>';
 		echo '<li class="list-group-item guide-tag tags">';
 		echo $tags;
@@ -291,7 +291,7 @@ function get_guide_nav() {
 		echo '</ul></nav>';
 	}
 
-	echo '<nav class="listnav"><ul class="list-group nav">';
+	echo '<nav class="guides listnav"><ul class="list-group nav">';
 	echo '<li class="list-group-item small">Posted '.date('j M Y',strtotime($post->post_date)).'<br />Last updated on '.date('j M Y', strtotime($post->post_modified_gmt)).'</li>';
 	echo '</ul></nav>';
 }
@@ -617,13 +617,13 @@ function guide_card_func($atts = [], $content = null) {
 
 		if ($post) {
 			$output .= '<div class="'.$col_class.'">';		
-			$output .= '<div class="guide-card-wrapper">';
+			$output .= '<div class="guide-card-wrapper para">';
 	  	    $output .= '<a href="'.get_the_permalink($guide_id).'">';
 	  	    $output .= '<div class="guide-card-thumbnail-wrapper">';
 	  		$output .= get_the_post_thumbnail($guide_id, 'shop_catalog', ['class' => 'img-responsive img-guide-archive'] );
-	        $output .= '</div><h3 class="product-title">'.get_the_title($guide_id).'</h3>';
+	        $output .= '</div><h5>'.get_the_title($guide_id).'</h5>';
 	  	    $output .= '</a>';
-	  	    $output .= '<p>'.get_the_excerpt($guide_id).'</p></div>';
+	  	    $output .= '<div class="page-description">'.get_the_excerpt($guide_id).'</div></div>';
 			$output .= '</div>';
 		}
 
@@ -670,6 +670,11 @@ function removesmartquotes($content) {
     
      return $content;
 }
+
+function guides_javascript() {
+	wp_enqueue_script('bluerobotics-wp-guides', plugins_url('bluerobotics-wp-guides/js/guides.js'), array('jquery'));
+}
+add_action('wp_enqueue_scripts', 'guides_javascript');
 
 function migration_javascript() {
 	wp_enqueue_script('bluerobotics-wp-guides', plugins_url('bluerobotics-wp-guides/js/guideMigration.js'));

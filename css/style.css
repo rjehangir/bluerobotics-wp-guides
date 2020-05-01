@@ -6,20 +6,24 @@
 
 .affix {
     position: static;
-    width:100%;
+    width:370px;
     display: none;
+}
+
+.affix-top,
+.affix-bottom {
+	width:370px;
 }
 
 @media (min-width: 768px) {
   .affix {
     position: fixed;
-    top:75px;
+    top:156px;
     display: inherit;
   }
 
   .affix-bottom {
     position: relative;
-    width: 100%;
     bottom: 0px;
   }
 }
@@ -27,15 +31,25 @@
 @media (min-width: 992px) {
   .affix {
     position: fixed;
-    top:75px;
+    top:156px;
     display: inherit;
   }
 
   .affix-bottom {
     position: relative;
-    width: 100%;
     bottom: 0px;
   }
+}
+
+.nav>li>a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+
+.guides .list-group {
+    margin-bottom: 20px !important;
+    padding-left: 0;
 }
 
 .list-group a:link, 
@@ -50,7 +64,10 @@
 }
 
 .listnav .list-group-item.nav-link {
-	padding: 0px;
+	padding-left: 0.25rem;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
 }
 
 .listnav .active,
@@ -67,6 +84,26 @@
 .listnav .anchor {
 	font-size:0.6em;
 	color:#aaa;
+}
+
+.nav-link:hover {
+	background: #eee;
+}
+
+.guides h1 {
+	font-size: 40px;
+}
+.guides h2 {
+	font-size: 30px;
+}
+.guides h3 {
+	font-size: 25px;
+}
+.guides h4 {
+	font-size: 20px;
+}
+.guides h5 {
+	font-size: 15px;
 }
 
 h1 .anchor,
@@ -96,11 +133,15 @@ h1.anchor-heading {
 }
 
 .img-guide-archive {
+	width: 100%;
+	height: 100%;
 	/*border: #ddd solid 1px;*/
 }
 
-.guide-image-caption {
-	font-size:0.9em;
+.guide-image-caption,
+.blog-container p.guide-image-caption {
+	font-family: inherit !important;
+	font-size: 0.9em !important;
 	color: #999;
 	padding-top: 5px;
 }
@@ -121,13 +162,18 @@ h1.anchor-heading {
 }
 
 .guide-card-wrapper {
-	height: 400px;
+	height: 500px;
 	margin-bottom: 40px;
+}
+
+.guide-card-wrapper h5 {
+	margin-top: 35px;
+    margin-bottom: 20px;
 }
 
 .guide-card-thumbnail-wrapper {
 	border: #ddd solid 1px;
-	height: 200px;
+	/*height: 200px;*/
 }
 
 .guide-card-row {
@@ -145,6 +191,14 @@ h1.anchor-heading {
 	line-height: inherit;
 	background-color: #2699d0;
 	border: none;
+    padding: .2em .6em .3em;
+    font-size: 85%;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
 }
 
 .guide-tag .label:hover {
@@ -169,12 +223,4 @@ pre.guide-code {
 	margin-top: 15px;
 	margin-bottom: 15px;
 	background-color: rgba(38,153,208,0.2);
-}
-
-.panel-default>.panel-heading {
-    background-color: #fff !important;
-}
-
-.panel-default strong {
-    color: #666;
 }
